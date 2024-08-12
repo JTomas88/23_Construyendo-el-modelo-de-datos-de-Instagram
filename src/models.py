@@ -9,11 +9,13 @@ Base = declarative_base()
 
 class Follower(Base):
     __tablename__ = 'Follower'  
-    user_from_id = Column(Integer, ForeignKey('User.id'), primary_key=True)
-    user_to_id =  Column(Integer, ForeignKey('User.id'), primary_key=True)
+    # Con ForeigKey me traigo el dato que esta entre ()
+    id = Column(Integer, primary_key=True)
+    user_from_id = Column(Integer, ForeignKey('User.id'))
+    user_to_id =  Column(Integer, ForeignKey('User.id'))
 
     user_from = relationship('User', back_populates='following')
-    user_to = relationship('User', back_populates='folowers')
+    user_to = relationship('User', back_populates='followers')
 
 class User(Base):
     __tablename__ = 'User'
@@ -23,6 +25,7 @@ class User(Base):
     lastname = Column(String(50))
     email = Column(String(50))
 
+    # No es una columna como tal
     following = relationship('Follower', back_populates='user_from')
     followers = relationship('Follower', back_populates='user_to')
 
@@ -33,7 +36,7 @@ class Comment(Base):
     __tablename__ = 'Comment'
     id = Column(Integer, primary_key=True)
     comment_text = Column(String(250))
-    author_id = Column(Integer, ForeignKey('User.id'))
+    author_id = Column(Integer, ForeignKey('User.id')) #Se crea la columna y a la misma vez se relaciona, trae el id de la tabla User. 
     post_id = Column(Integer, ForeignKey('Post.id'))
 
     user_comment = relationship('User', back_populates='comments')
